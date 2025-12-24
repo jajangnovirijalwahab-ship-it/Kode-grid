@@ -1,6 +1,12 @@
 <!DOCTYPE html>  <html>  
 <head>  
-  // Import the functions you need from the SDKs you need
+  <!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: " // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -16,10 +22,115 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);  ",
+    authDomain: "// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCx41ZqmOIxnPR2LdprMOB4zUYPkthrhkA",
+  authDomain: "pencarian-kode-grid.firebaseapp.com",
+  projectId: "pencarian-kode-grid",
+  storageBucket: "pencarian-kode-grid.firebasestorage.app",
+  messagingSenderId: "58802804762",
+  appId: "1:58802804762:web:3289ea573f802f288d59a3"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);",
+    projectId: "// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCx41ZqmOIxnPR2LdprMOB4zUYPkthrhkA",
+  authDomain: "pencarian-kode-grid.firebaseapp.com",
+  projectId: "pencarian-kode-grid",
+  storageBucket: "pencarian-kode-grid.firebasestorage.app",
+  messagingSenderId: "58802804762",
+  appId: "1:58802804762:web:3289ea573f802f288d59a3"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);",
+    storageBucket: "// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCx41ZqmOIxnPR2LdprMOB4zUYPkthrhkA",
+  authDomain: "pencarian-kode-grid.firebaseapp.com",
+  projectId: "pencarian-kode-grid",
+  storageBucket: "pencarian-kode-grid.firebasestorage.app",
+  messagingSenderId: "58802804762",
+  appId: "1:58802804762:web:3289ea573f802f288d59a3"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);",
+    messagingSenderId: "// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCx41ZqmOIxnPR2LdprMOB4zUYPkthrhkA",
+  authDomain: "pencarian-kode-grid.firebaseapp.com",
+  projectId: "pencarian-kode-grid",
+  storageBucket: "pencarian-kode-grid.firebasestorage.app",
+  messagingSenderId: "58802804762",
+  appId: "1:58802804762:web:3289ea573f802f288d59a3"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);",
+    appId: "// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCx41ZqmOIxnPR2LdprMOB4zUYPkthrhkA",
+  authDomain: "pencarian-kode-grid.firebaseapp.com",
+  projectId: "pencarian-kode-grid",
+  storageBucket: "pencarian-kode-grid.firebasestorage.app",
+  messagingSenderId: "58802804762",
+  appId: "1:58802804762:web:3289ea573f802f288d59a3"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+</script>
   <title>Pencarian Barang</title>  
 </head>  
-<body>  <h2>Pencarian KODE GRID</h2>  <input type="text" id="search" placeholder="Ketik nama barang...">  <ul id="hasil"></ul>  <script>  
+<body> 
+  <div id="loginBox">
+  <h3>Login Akses Kode</h3>
+
+  <input type="email" id="email" placeholder="Email">
+  <br><br>
+
+  <input type="password" id="password" placeholder="Password">
+  <br><br>
+
+  <button onclick="login()">Login</button>
+
+  <p id="loginError" style="color:red;"></p>
+</div>
+  <div id="dataKode" style="display:none;">
+  <h2>Pencarian KODE GRID</h2>  <input type="text" id="search" placeholder="Ketik nama barang...">  <ul id="hasil"></ul>  <script>  
   // DATA BARANG  
   const dataBarang = [  
     "KM8F9001JM RAM 8",
@@ -296,6 +407,8 @@ const app = initializeApp(firebaseConfig);
     
       
   ];  
+    
+    </div>
   
   // AMBIL ELEMEN  
   const search = document.getElementById("search");  
