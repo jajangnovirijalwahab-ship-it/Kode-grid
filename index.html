@@ -1,139 +1,70 @@
-<!DOCTYPE html>  <html>  
-<head>  
-  <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Pencarian Kode GRID</title>
 
-<script>
-  const firebaseConfig = {
-    apiKey: " // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+  <!-- Firebase SDK (COMPAT) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCx41ZqmOIxnPR2LdprMOB4zUYPkthrhkA",
-  authDomain: "pencarian-kode-grid.firebaseapp.com",
-  projectId: "pencarian-kode-grid",
-  storageBucket: "pencarian-kode-grid.firebasestorage.app",
-  messagingSenderId: "58802804762",
-  appId: "1:58802804762:web:3289ea573f802f288d59a3"
-};
+  <script>
+    // KONFIGURASI FIREBASE (BERSIH & BENAR)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCx41ZqmOIxnPR2LdprMOB4zUYPkthrhkA",
+      authDomain: "pencarian-kode-grid.firebaseapp.com",
+      projectId: "pencarian-kode-grid",
+      storageBucket: "pencarian-kode-grid.firebasestorage.app",
+      messagingSenderId: "58802804762",
+      appId: "1:58802804762:web:3289ea573f802f288d59a3"
+    };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);  ",
-    authDomain: "// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+  </script>
+</head>
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCx41ZqmOIxnPR2LdprMOB4zUYPkthrhkA",
-  authDomain: "pencarian-kode-grid.firebaseapp.com",
-  projectId: "pencarian-kode-grid",
-  storageBucket: "pencarian-kode-grid.firebasestorage.app",
-  messagingSenderId: "58802804762",
-  appId: "1:58802804762:web:3289ea573f802f288d59a3"
-};
+<body>
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);",
-    projectId: "// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCx41ZqmOIxnPR2LdprMOB4zUYPkthrhkA",
-  authDomain: "pencarian-kode-grid.firebaseapp.com",
-  projectId: "pencarian-kode-grid",
-  storageBucket: "pencarian-kode-grid.firebasestorage.app",
-  messagingSenderId: "58802804762",
-  appId: "1:58802804762:web:3289ea573f802f288d59a3"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);",
-    storageBucket: "// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCx41ZqmOIxnPR2LdprMOB4zUYPkthrhkA",
-  authDomain: "pencarian-kode-grid.firebaseapp.com",
-  projectId: "pencarian-kode-grid",
-  storageBucket: "pencarian-kode-grid.firebasestorage.app",
-  messagingSenderId: "58802804762",
-  appId: "1:58802804762:web:3289ea573f802f288d59a3"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);",
-    messagingSenderId: "// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCx41ZqmOIxnPR2LdprMOB4zUYPkthrhkA",
-  authDomain: "pencarian-kode-grid.firebaseapp.com",
-  projectId: "pencarian-kode-grid",
-  storageBucket: "pencarian-kode-grid.firebasestorage.app",
-  messagingSenderId: "58802804762",
-  appId: "1:58802804762:web:3289ea573f802f288d59a3"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);",
-    appId: "// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCx41ZqmOIxnPR2LdprMOB4zUYPkthrhkA",
-  authDomain: "pencarian-kode-grid.firebaseapp.com",
-  projectId: "pencarian-kode-grid",
-  storageBucket: "pencarian-kode-grid.firebasestorage.app",
-  messagingSenderId: "58802804762",
-  appId: "1:58802804762:web:3289ea573f802f288d59a3"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-</script>
-  <title>Pencarian Barang</title>  
-</head>  
-<body> 
-  <div id="loginBox">
+<!-- LOGIN -->
+<div id="loginBox">
   <h3>Login Akses Kode</h3>
-
-  <input type="email" id="email" placeholder="Email">
-  <br><br>
-
-  <input type="password" id="password" placeholder="Password">
-  <br><br>
-
+  <input type="email" id="email" placeholder="Email"><br><br>
+  <input type="password" id="password" placeholder="Password"><br><br>
   <button onclick="login()">Login</button>
-
   <p id="loginError" style="color:red;"></p>
 </div>
-  <div id="dataKode" style="display:none;">
-  <h2>Pencarian KODE GRID</h2>  <input type="text" id="search" placeholder="Ketik nama barang...">  <ul id="hasil"></ul>  <script>  
-  // DATA BARANG  
-  const dataBarang = [  
-    "KM8F9001JM RAM 8",
+
+<!-- DATA (TERKUNCI) -->
+<div id="dataKode" style="display:none;">
+  <h2>Pencarian KODE GRID</h2>
+  <input type="text" id="search" placeholder="Ketik kode...">
+  <ul id="hasil"></ul>
+</div>
+
+<script>
+  // LOGIN FUNCTION
+  function login() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    auth.signInWithEmailAndPassword(email, password)
+      .catch(err => {
+        document.getElementById("loginError").innerText = err.message;
+      });
+  }
+
+  // CEK STATUS LOGIN
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      document.getElementById("loginBox").style.display = "none";
+      document.getElementById("dataKode").style.display = "block";
+    }
+  });
+
+  // ================= DATA ASLI ANDA =================
+  const dataBarang = [
+      "KM8F9001JM RAM 8",
     "H9hq21aecmzdar RAM 8",
     "Kmas9001pm RAM 8",
     "Kmjs9001rm RAM 8",
@@ -404,28 +335,24 @@ const app = initializeApp(firebaseConfig);"
   "SDINADFA-32G P32",  
   "SDINADFA-64G P32",
     "HQTP32A4GDBC AB",
-    
-      
-  ];  
-    
-    </div>
-  
-  // AMBIL ELEMEN  
-  const search = document.getElementById("search");  
-  const hasil = document.getElementById("hasil");  
-  
-  // SAAT USER MENGETIK  
-  search.addEventListener("keyup", function () {  
-    const keyword = this.value.toLowerCase();  
-    hasil.innerHTML = "";  
-  
-    dataBarang.forEach(barang => {  
-      if (barang.toLowerCase().includes(keyword)) {  
-        const li = document.createElement("li");  
-        li.textContent = barang;  
-        hasil.appendChild(li);  
-      }  
-    });  
-  });  
-</script>  </body>  
+  ];
+
+  const search = document.getElementById("search");
+  const hasil = document.getElementById("hasil");
+
+  search.addEventListener("keyup", () => {
+    const keyword = search.value.toLowerCase();
+    hasil.innerHTML = "";
+
+    dataBarang.forEach(item => {
+      if (item.toLowerCase().includes(keyword)) {
+        const li = document.createElement("li");
+        li.textContent = item;
+        hasil.appendChild(li);
+      }
+    });
+  });
+</script>
+
+</body>
 </html>
