@@ -7,7 +7,8 @@
   <!-- Firebase SDK (COMPAT) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  
   <script>
     // KONFIGURASI FIREBASE (BERSIH & BENAR)
     const firebaseConfig = {
@@ -21,6 +22,14 @@
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
+    function getDeviceId() {
+  let id = localStorage.getItem("device_id");
+  if (!id) {
+    id = "dev-" + Math.random().toString(36).substr(2, 16);
+    localStorage.setItem("device_id", id);
+  }
+  return id;
+}
     auth.onAuthStateChanged(user => {
   if (user) {
     document.getElementById("watermark").textContent =
@@ -72,14 +81,42 @@
 <script>
   // LOGIN FUNCTION
   function login() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const deviceId = getDeviceId();
 
-    auth.signInWithEmailAndPassword(email, password)
-      .catch(err => {
-        document.getElementById("loginError").innerText = err.message;
+    auth.onAuthStateChanged(user => {
+  if (!user) {
+    const deviceId = getDeviceId();
+    firebase.database().ref("sessions")
+      .orderByValue()
+      .equalTo(deviceId)
+      .once("value", snap => {
+        snap.forEach(s => s.ref.remove());
       });
   }
+});
+
+  auth.signInWithEmailAndPassword(email, password)
+    .then(cred => {
+      const uid = cred.user.uid;
+      const ref = firebase.database().ref("sessions/" + uid);
+
+      ref.once("value").then(snapshot => {
+        const savedDevice = snapshot.val();
+
+        if (savedDevice && savedDevice !== deviceId) {
+          alert("Akun ini sedang digunakan di HP lain");
+          auth.signOut();
+        } else {
+          ref.set(deviceId);
+        }
+      });
+    })
+    .catch(err => {
+      document.getElementById("loginError").innerText = err.message;
+    });
+}
 
   // CEK STATUS LOGIN
   auth.onAuthStateChanged(user => {
