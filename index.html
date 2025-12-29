@@ -1,28 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Pencarian Kode GRID</title>
+<meta charset="UTF-8">
+<title>Pencarian Kode GRID</title>
 
-  <!-- Firebase SDK (COMPAT) -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-  
-  <script>
-    // KONFIGURASI FIREBASE (BERSIH & BENAR)
-    const firebaseConfig = {
-      apiKey: "AIzaSyCx41ZqmOIxnPR2LdprMOB4zUYPkthrhkA",
-      authDomain: "pencarian-kode-grid.firebaseapp.com",
-      projectId: "pencarian-kode-grid",
-      storageBucket: "pencarian-kode-grid.firebasestorage.app",
-      messagingSenderId: "58802804762",
-      appId: "1:58802804762:web:3289ea573f802f288d59a3"
-    };
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    function getDeviceId() {
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCx41ZqmOIxnPR2LdprMOB4zUYPkthrhkA",
+  authDomain: "pencarian-kode-grid.firebaseapp.com",
+  projectId: "pencarian-kode-grid",
+  storageBucket: "pencarian-kode-grid.firebasestorage.app",
+  messagingSenderId: "58802804762",
+  appId: "1:58802804762:web:3289ea573f802f288d59a3"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+
+function getDeviceId() {
   let id = localStorage.getItem("device_id");
   if (!id) {
     id = "dev-" + Math.random().toString(36).substr(2, 16);
@@ -30,20 +31,12 @@
   }
   return id;
 }
-    auth.onAuthStateChanged(user => {
-  if (user) {
-    document.getElementById("watermark").textContent =
-      "AKSES TERBATAS\n" + user.email;
-  }
-});
-  </script>
-   <style>
+</script>
+
+<style>
 #watermark {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   pointer-events: none;
   z-index: 9999;
   opacity: 0.12;
@@ -61,74 +54,87 @@
 
 <body>
 
-<!-- LOGIN -->
 <div id="loginBox">
-  <h3>Login Akses Kode</h3>
+  <h3>Login Akses</h3>
   <input type="email" id="email" placeholder="Email"><br><br>
   <input type="password" id="password" placeholder="Password"><br><br>
   <button onclick="login()">Login</button>
   <p id="loginError" style="color:red;"></p>
 </div>
 
-<!-- DATA (TERKUNCI) -->
 <div id="dataKode" style="display:none;">
-   <div id="watermark"></div>
-  <h2>Pencarian KODE GRID</h2>
+  <div id="watermark"></div>
+  <h2>Pencarian Kode GRID</h2>
   <input type="text" id="search" placeholder="Ketik kode...">
   <ul id="hasil"></ul>
 </div>
 
 <script>
-  // LOGIN FUNCTION
-  function login() {
+const loginBox = document.getElementById("loginBox");
+const dataKode = document.getElementById("dataKode");
+const watermark = document.getElementById("watermark");
+const loginError = document.getElementById("loginError");
+
+function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const deviceId = getDeviceId();
 
-    auth.onAuthStateChanged(user => {
-  if (!user) {
-    const deviceId = getDeviceId();
-    firebase.database().ref("sessions")
-      .orderByValue()
-      .equalTo(deviceId)
-      .once("value", snap => {
-        snap.forEach(s => s.ref.remove());
-      });
-  }
-});
-
   auth.signInWithEmailAndPassword(email, password)
     .then(cred => {
       const uid = cred.user.uid;
-      const ref = firebase.database().ref("sessions/" + uid);
+      const ref = db.ref("sessions/" + uid);
 
-      ref.once("value").then(snapshot => {
-        const savedDevice = snapshot.val();
-
-        if (savedDevice && savedDevice !== deviceId) {
-          alert("Akun ini sedang digunakan di HP lain");
-          auth.signOut();
+      ref.once("value").then(snap => {
+        if (snap.exists()) {
+          const data = snap.val();
+          if (data.deviceId !== deviceId) {
+            alert("Akun sedang digunakan di HP lain");
+            auth.signOut();
+          }
         } else {
-          ref.set(deviceId);
+          ref.set({
+            deviceId: deviceId,
+            email: cred.user.email,
+            lastLogin: Date.now()
+          });
         }
       });
     })
-    .catch(err => {
-      document.getElementById("loginError").innerText = err.message;
-    });
+    .catch(err => loginError.innerText = err.message);
 }
 
-  // CEK STATUS LOGIN
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      document.getElementById("loginBox").style.display = "none";
-      document.getElementById("dataKode").style.display = "block";
-    }
-  });
+auth.onAuthStateChanged(user => {
+  if (user) {
+    loginBox.style.display = "none";
+    dataKode.style.display = "block";
+    watermark.textContent = "AKSES TERBATAS\n" + user.email;
 
-  // ================= DATA ASLI ANDA =================
-  const dataBarang = [
-     "SDINEF0-256G P RAM 8",
+    const uid = user.uid;
+    const deviceId = getDeviceId();
+    const ref = db.ref("sessions/" + uid);
+
+    // 🔥 AUTO LOGOUT JIKA LOGIN DI HP LAIN
+    ref.on("value", snap => {
+      if (snap.exists()) {
+        const data = snap.val();
+        if (data.deviceId !== deviceId) {
+          alert("Akun login di perangkat lain");
+          auth.signOut();
+        }
+      }
+    });
+  } else {
+    loginBox.style.display = "block";
+    dataKode.style.display = "none";
+  }
+});
+</script>
+
+<script>
+/* ================= DATA KODE ================= */
+const dataBarang = [
+  "SDINEF0-256G P RAM 8",
     "SDINEDK4-256G P RAM 8",
     "HNST26EXKX03YN P RAM 8",
     "HNST26EXKX03N P RAM 8",
@@ -427,23 +433,22 @@
     "2400181-001.A00G-A AB",
     "H9TQ32A6BTMC AB",
     "H9TQ64AAETAC AB",
-  ];
+];
 
-  const search = document.getElementById("search");
-  const hasil = document.getElementById("hasil");
+const search = document.getElementById("search");
+const hasil = document.getElementById("hasil");
 
-  search.addEventListener("keyup", () => {
-    const keyword = search.value.toLowerCase();
-    hasil.innerHTML = "";
-
-    dataBarang.forEach(item => {
-      if (item.toLowerCase().includes(keyword)) {
-        const li = document.createElement("li");
-        li.textContent = item;
-        hasil.appendChild(li);
-      }
-    });
+search.addEventListener("keyup", () => {
+  const key = search.value.toLowerCase();
+  hasil.innerHTML = "";
+  dataBarang.forEach(item => {
+    if (item.toLowerCase().includes(key)) {
+      const li = document.createElement("li");
+      li.textContent = item;
+      hasil.appendChild(li);
+    }
   });
+});
 </script>
 
 </body>
