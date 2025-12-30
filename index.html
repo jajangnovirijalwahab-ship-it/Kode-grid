@@ -65,8 +65,27 @@ function getDeviceId() {
 <div id="dataKode" style="display:none;">
   <div id="watermark"></div>
   <h2>Pencarian Kode GRID</h2>
-  <input type="text" id="search" placeholder="Ketik kode...">
-  <ul id="hasil"></ul>
+  <div style="display:flex; gap:15px; align-items:flex-start;">
+
+  <!-- PENCARIAN -->
+  <div>
+    <input type="text" id="search" placeholder="Ketik kode...">
+    <ul id="hasil"></ul>
+  </div>
+
+  <!-- KOTAK PEMBERITAHUAN -->
+  <div id="notifBox"
+       style="
+         width:220px;
+         min-height:120px;
+         border:1px solid red;
+         padding:10px;
+         font-size:14px;
+         background:#fff5f5;
+       ">
+    Memuat pemberitahuan...
+  </div>
+
 </div>
 
 <script>
