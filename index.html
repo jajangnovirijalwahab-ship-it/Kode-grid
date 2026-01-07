@@ -10,50 +10,54 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
+/* ================= FIREBASE ================= */
 const firebaseConfig = {
   apiKey: "AIzaSyCx41ZqmOIxnPR2LdprMOB4zUYPkthrhkA",
   authDomain: "pencarian-kode-grid.firebaseapp.com",
   projectId: "pencarian-kode-grid",
-  storageBucket: "pencarian-kode-grid.firebasestorage.app",
+  storageBucket: "pencarian-kode-grid.appspot.com",
   messagingSenderId: "58802804762",
   appId: "1:58802804762:web:3289ea573f802f288d59a3"
 };
 
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const dbfirebasedatabase()
 
+const auth = firebase.auth();
+const db = firebase.database();
+
+/* ================= DEVICE ID ================= */
 function getDeviceId() {
-  let idlocalStoragegetItem("device_id")
-  if (id) {
-    id"dev-"Mathrandom()toString(36)substr(216)
-    localStoragesetItem("device_id"id)
+  let id = localStorage.getItem("device_id");
+  if (!id) {
+    id = "dev-" + Math.random().toString(36).substr(2, 16);
+    localStorage.setItem("device_id", id);
   }
-  return id
+  return id;
 }
 </script>
 
 <style>
-#watermark {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.12;
-  font-size: 28px;
-  color: red;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transform: rotate(-30deg);
-  white-space: pre-line;
-  text-align: center;
+#watermark{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:9999;
+  opacity:0.12;
+  font-size:28px;
+  color:red;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  transform:rotate(-30deg);
+  white-space:pre-line;
+  text-align:center;
 }
 </style>
 </head>
 
 <body>
 
+<!-- ================= LOGIN ================= -->
 <div id="loginBox">
   <h3>Login Akses</h3>
   <input type="email" id="email" placeholder="Email"><br><br>
@@ -62,90 +66,68 @@ function getDeviceId() {
   <p id="loginError" style="color:red;"></p>
 </div>
 
+<!-- ================= DATA ================= -->
 <div id="dataKode" style="display:none;">
   <div id="watermark"></div>
   <h2>Pencarian Kode GRID</h2>
-  <div style="display:flex; gap:15px; align-items:flex-start;">
 
-  <!-- PENCARIAN -->
-  <div>
-    <input type="text" id="search" placeholder="Ketik kode...">
-    <ul id="hasil"></ul>
-  </div>
-
-  <!-- KOTAK PEMBERITAHUAN -->
-  <div id="notifBox"
-       style="
-         width:220px;
-         min-height:120px;
-         border:1px solid red;
-         padding:10px;
-         font-size:14px;
-         background:#fff5f5;
-       ">
-    Memuat pemberitahuan...
-  </div>
-
+  <input type="text" id="search" placeholder="Ketik kode...">
+  <ul id="hasil"></ul>
 </div>
 
 <script>
-const loginBox = document.getElementById("loginBox");
-const dataKode = document.getElementById("dataKode");
-const watermark = document.getElementById("watermark");
-const loginError = document.getElementById("loginError");
-
-function login() {
+/* ================= LOGIN FUNCTION ================= */
+function login(){
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const deviceId = getDeviceId();
 
-  auth.signInWithEmailAndPassword(email, password)
-    .then(cred => {
+  auth.signInWithEmailAndPassword(email,password)
+    .then(cred=>{
       const uid = cred.user.uid;
-      const ref = db.ref("sessions/" + uid);
+      const ref = db.ref("sessions/"+uid);
 
-      ref.once("value").then(snap => {
-        if (snap.exists()) {
-          const data = snap.val();
-          if (data.deviceId !== deviceId) {
-            alert("Akun sedang digunakan di HP lain");
-            auth.signOut();
-          }
-        } else {
+      ref.once("value").then(snap=>{
+        if(snap.exists() && snap.val().deviceId !== deviceId){
+          alert("❌ Akun sudah login di HP lain");
+          auth.signOut();
+        }else{
           ref.set({
             deviceId: deviceId,
-            email: cred.user.email,
+            email: email,
             lastLogin: Date.now()
           });
         }
       });
     })
-    .catch(err => loginError.innerText = err.message);
+    .catch(err=>{
+      document.getElementById("loginError").innerText = err.message;
+    });
 }
 
-auth.onAuthStateChanged(user => {
-  if (user) {
-    loginBox.style.display = "none";
-    dataKode.style.display = "block";
-    watermark.textContent = "AKSES TERBATAS\n" + user.email;
+/* ================= AUTH STATE ================= */
+auth.onAuthStateChanged(user=>{
+  const loginBox = document.getElementById("loginBox");
+  const dataKode = document.getElementById("dataKode");
+  const watermark = document.getElementById("watermark");
+
+  if(user){
+    loginBox.style.display="none";
+    dataKode.style.display="block";
+    watermark.innerText = "AKSES TERBATAS\n"+user.email;
 
     const uid = user.uid;
     const deviceId = getDeviceId();
-    const ref = db.ref("sessions/" + uid);
 
-    // 🔥 AUTO LOGOUT JIKA LOGIN DI HP LAIN
-    ref.on("value", snap => {
-      if (snap.exists()) {
-        const data = snap.val();
-        if (data.deviceId !== deviceId) {
-          alert("Akun login di perangkat lain");
-          auth.signOut();
-        }
+    db.ref("sessions/"+uid).on("value",snap=>{
+      if(snap.exists() && snap.val().deviceId !== deviceId){
+        alert("⚠️ Akun login di perangkat lain");
+        auth.signOut();
       }
     });
-  } else {
-    loginBox.style.display = "block";
-    dataKode.style.display = "none";
+  }else{
+    loginBox.style.display="block";
+    dataKode.style.display="none";
   }
 });
 </script>
@@ -486,14 +468,15 @@ const dataBarang = [
   "KNN5VZ000ZN AB",
 ];
 
+/* ================= SEARCH ================= */
 const search = document.getElementById("search");
 const hasil = document.getElementById("hasil");
 
-search.addEventListener("keyup", () => {
+search.addEventListener("keyup",()=>{
   const key = search.value.toLowerCase();
-  hasil.innerHTML = "";
-  dataBarang.forEach(item => {
-    if (item.toLowerCase().includes(key)) {
+  hasil.innerHTML="";
+  dataBarang.forEach(item=>{
+    if(item.toLowerCase().includes(key)){
       const li = document.createElement("li");
       li.textContent = item;
       hasil.appendChild(li);
